@@ -110,6 +110,8 @@ def game_player_vs_player():
     rounds_counter = 1
     while player_one_lives_counter > 0 and player_two_lives_counter > 0:
         print(f"Round number: {rounds_counter}")
+        print(f"PLAYER ONE: {player_one_lives_counter} HP")
+        print(f"PLATER TWO: {player_two_lives_counter} HP")
         while True:
             print("Player one! Enter you choice!")
             player_one_input = input(">")
@@ -154,7 +156,9 @@ def game_player_vs_player():
         else:
             pass
 
-        result_phase_2 = proccess_users_input(player_one_choice, player_two_choice)
+        print("Phase 2 reached")
+        result_phase_2 = evaluate_players_choices(player_one_choice, player_two_choice)
+        print(f"Result_phase2: {result_phase_2}")
         if result_phase_2 == 1:
             player_two_lives_counter -= 1
             print("ROUND ENDED\nWINNER: PLAYER ONE")
@@ -187,6 +191,7 @@ def game_player_vs_player():
 # > int result
 # 0 = no ammo used, 1 = player one wins, 2 = player two wins
 # 3 = both users shot (DRAW), 4 = users are ouf of ammo (DRAW)
+# TODO Investigate: No G VS G will result in a draw
 def check_ammo(A, B):
     player_one_status = 1
     player_two_status = 1
@@ -195,6 +200,7 @@ def check_ammo(A, B):
     global player_one_lives_counter
     global player_two_lives_counter
     if A != 4 and B != 4:
+        print("NO GUNS USED")
         return 0
     else:
         if A == 4:
