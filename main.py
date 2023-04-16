@@ -1,3 +1,5 @@
+# Imports
+import random
 # Data
 
 acceptable_input = ["1", "2", "3", "4", "r", "p", "s", "g",\
@@ -11,8 +13,15 @@ __p1_shells__ = 3
 __p2_shells__ = 3
 player_one_lives_counter = 0
 player_two_lives_counter = 0
+CPU_player_flag = 0
 
 # Functions
+
+def random_ouput():
+    rand = random.randint(1,4)
+    print(f"RESULT> {rand}")
+    result = str(rand)
+    return result
 
 def set_players_live_counters(A, B):
     global player_one_lives_counter
@@ -105,6 +114,7 @@ def check_user_input(A):
 def game_player_vs_player():
     global player_one_lives_counter
     global player_two_lives_counter
+    global CPU_player_flag
     # TODO: Add decsision setting live counters
     set_players_live_counters(3,3)
     rounds_counter = 1
@@ -122,6 +132,10 @@ def game_player_vs_player():
                 print(acceptable_input)
 
         while True:
+            if CPU_player_flag == 1:
+                print("Computer input")
+                player_two_input = random_ouput()
+                break
             print("Player two! Enter you choice!")
             player_two_input = input(">")
             if check_user_input(player_two_input) == True:
@@ -178,7 +192,7 @@ def game_player_vs_player():
     if player_one_lives_counter == 0 and player_two_lives_counter > 0:
         print("END OF THE GAME, THE WINNER IS:\nPLAYER TWO")
     elif player_two_lives_counter == 0 and player_one_lives_counter > 0:
-        print("END OF THE GAME, THE WINNER IS:\nPLAYER TWO")
+        print("END OF THE GAME, THE WINNER IS:\nPLAYER ONE")
     elif player_one_lives_counter == 0 and player_two_lives_counter == 0:
         print("END OF THE GAME, DRAW")
     else:
@@ -191,10 +205,9 @@ def game_player_vs_player():
 # > int result
 # 0 = no ammo used, 1 = player one wins, 2 = player two wins
 # 3 = both users shot (DRAW), 4 = users are ouf of ammo (DRAW)
-# TODO Investigate: No G VS G will result in a draw
 def check_ammo(A, B):
-    player_one_status = 1
-    player_two_status = 1
+    player_one_status = 0
+    player_two_status = 0
     global __p1_shells__
     global __p2_shells__
     global player_one_lives_counter
@@ -206,12 +219,14 @@ def check_ammo(A, B):
         if A == 4:
             if __p1_shells__ > 0:
                 __p1_shells__-= 1
+                player_one_status = 1
             else:
                 player_one_status = 0
 
         if B == 4:
             if __p2_shells__ > 0:
                 __p2_shells__-= 1
+                player_two_status = 1
             else:
                 player_two_status = 0
 
@@ -228,4 +243,5 @@ def check_ammo(A, B):
 # Main flow start
 print("START")
 print(WELCOME_MESSAGE)
+CPU_player_flag = 1
 game_player_vs_player()
