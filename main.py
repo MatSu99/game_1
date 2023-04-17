@@ -111,12 +111,12 @@ def check_user_input(A):
             return True
     return False
 
-def game_player_vs_player():
+def game_player_vs_player(A):
     global player_one_lives_counter
     global player_two_lives_counter
     global CPU_player_flag
     # TODO: Add decsision setting live counters
-    set_players_live_counters(3,3)
+    set_players_live_counters(A,A)
     rounds_counter = 1
     while player_one_lives_counter > 0 and player_two_lives_counter > 0:
         print(f"Round number: {rounds_counter}")
@@ -243,5 +243,26 @@ def check_ammo(A, B):
 # Main flow start
 print("START")
 print(WELCOME_MESSAGE)
-CPU_player_flag = 1
-game_player_vs_player()
+num_of_lifes = 3
+# Select mode [P VS P or P VS CPU]
+while True:
+    input_arg_1 = input("Game vs CPU? [y/n]>")
+    if input_arg_1 == "y":
+        CPU_player_flag = 1
+        break
+    elif input_arg_1 == "n":
+        CPU_player_flag = 0
+        break
+    else:
+        pass
+# Get number of lifes from player, it handles ValueError if occurs
+while True:
+    input_arg_2 = input("Enter numer of HP for both players: >")
+    input_arg_2_cast = 0
+    try:
+        input_arg_2_cast = int(input_arg_2) # ! If this throws an exceptions
+        break                               # ! Other lines in try clause are not executed
+    except ValueError:
+        print("Please enter number")
+
+game_player_vs_player(num_of_lifes)
