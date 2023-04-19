@@ -18,10 +18,20 @@ CPU_player_flag = 0
 # Functions
 
 def random_ouput():
-    rand = random.randint(1,4)
+    global __p2_shells__
+    max_range = 0
+    if __p2_shells__ <= 0:
+        max_range = 3
+    else:
+        max_range = 4
+    rand = random.randint(1,max_range)
     print(f"RESULT> {rand}")
     result = str(rand)
     return result
+
+def reload(A = 3):
+    __p1_shells__ = A
+    __p2_shells__ = A
 
 def set_players_live_counters(A, B):
     global player_one_lives_counter
@@ -244,25 +254,44 @@ def check_ammo(A, B):
 print("START")
 print(WELCOME_MESSAGE)
 num_of_lifes = 3
+exit_game = True
+while exit_game:
+    reload()
 # Select mode [P VS P or P VS CPU]
-while True:
-    input_arg_1 = input("Game vs CPU? [y/n]>")
-    if input_arg_1 == "y":
-        CPU_player_flag = 1
-        break
-    elif input_arg_1 == "n":
-        CPU_player_flag = 0
-        break
-    else:
-        pass
-# Get number of lifes from player, it handles ValueError if occurs
-while True:
-    input_arg_2 = input("Enter numer of HP for both players: >")
-    input_arg_2_cast = 0
-    try:
-        input_arg_2_cast = int(input_arg_2) # ! If this throws an exceptions
-        break                               # ! Other lines in try clause are not executed
-    except ValueError:
-        print("Please enter number")
+    while True:
+        input_arg_1 = input("Game vs CPU? [y/n]>")
+        if input_arg_1 == "y":
+            CPU_player_flag = 1
+            break
+        elif input_arg_1 == "n":
+            CPU_player_flag = 0
+            break
+        else:
+            pass
+    # Get number of lifes from player, it handles ValueError if occurs
+    while True:
+        input_arg_2 = input("Enter numer of HP for both players: >")
+        input_arg_2_cast = 0
+        try:
+            input_arg_2_cast = int(input_arg_2) # ! If this throws an exceptions
+            break                               # ! Other lines in try clause are not executed
+        except ValueError:
+            print("Please enter number")
+    if input_arg_2_cast < 1:
+        input_arg_2_cast = 1
+        print("Incorrect number of HP!\n Set to one!")
+    game_player_vs_player(input_arg_2_cast)
 
-game_player_vs_player(num_of_lifes)
+    while True:
+        input_arg_3 = input("Another round? >")
+        print(input_arg_3)
+        if input_arg_3 == "y":
+            exit_game = True
+            break
+        elif input_arg_3 == "n":
+            exit_game = False
+            break
+        else:
+            pass
+
+print("Goodbye!!!")
