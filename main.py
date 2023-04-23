@@ -1,5 +1,6 @@
 # Imports
 import random
+import log_tool
 # Data
 
 acceptable_input = ["1", "2", "3", "4", "r", "p", "s", "g",\
