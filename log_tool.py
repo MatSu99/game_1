@@ -16,15 +16,34 @@ class LogSetup(Log):
         self.player_two_shells = p2_shells
         self.log_action = action
 
+    def ProduceString(self):
+        pass
+
 class LogClash(Log):
-    pass
+    player_one_choice = 0
+    player_two_choice = 0
+
+    def SetInfo(self, p1_choice, p2_choice):
+        self.player_one_choice = p1_choice
+        self.player_two_choice = p2_choice
+
+    def ProduceString(self):
+        pass
 
 class LogResult(Log):
-    pass
+    result = 0
+    number_of_rounds = 0
+
+    def SetInfo(self, final_result, rounds):
+        self.result = final_result
+        self.number_of_rounds = rounds
+        
+    def ProduceString(self):
+        pass
 
 class LogTool:
     Logs = []
     counter = 0
 
-    def __init__(self) -> None:
+    def Export_as_txt(self):
         pass
