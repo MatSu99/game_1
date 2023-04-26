@@ -26,7 +26,7 @@ def random_ouput():
     else:
         max_range = 4
     rand = random.randint(1,max_range)
-    print(f"RESULT> {rand}")
+    # print(f"RESULT> {rand}")
     result = str(rand)
     return result
 
@@ -126,7 +126,6 @@ def game_player_vs_player(A):
     global player_one_lives_counter
     global player_two_lives_counter
     global CPU_player_flag
-    # TODO: Add decsision setting live counters
     set_players_live_counters(A,A)
     rounds_counter = 1
     while player_one_lives_counter > 0 and player_two_lives_counter > 0:
