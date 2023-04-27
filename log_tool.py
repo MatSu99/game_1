@@ -1,3 +1,5 @@
+import time
+
 class Log(object):
     log_id = 0
     log_action = None
@@ -39,9 +41,11 @@ class LogClash(Log):
     player_one_choice = 0
     player_two_choice = 0
 
-    def SetInfo(self, p1_choice, p2_choice):
+    def SetInfo(self, p1_choice, p2_choice, id, action):
         self.player_one_choice = p1_choice
         self.player_two_choice = p2_choice
+        self.log_id = id
+        self.log_action = action
 
     def ToString(self):
         result = "Log ID: "
@@ -58,9 +62,11 @@ class LogResult(Log):
     result = 0
     number_of_rounds = 0
 
-    def SetInfo(self, final_result, rounds):
+    def SetInfo(self, final_result, rounds, id, action):
         self.result = final_result
         self.number_of_rounds = rounds
+        self.log_id = id
+        self.log_action = action
         
     def ToString(self):
         result = "Log ID: "
@@ -77,13 +83,25 @@ class LogTool:
     Logs = []
     counter = 0
 
+
     def NewEntry(self,NewLog):
         self.Logs.append(NewLog)
         self.counter += 1
 
 
-    def Export_as_txt(self):
-        pass
+    def Export_as_txt(self, Name:str ):
+        NameOfFile = Name + ".txt"
+        with open(NameOfFile, "w") as file:
+            for x in self.Logs:
+                file.write(x + '\n')
+            file.close()
+
+
+    def GetId(self):
+        return self.counter
+    
+    def PrintLogs(self):
+        print(self.Logs)
 
 # test
 

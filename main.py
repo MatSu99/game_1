@@ -1,6 +1,6 @@
 # Imports
 import random
-import log_tool
+from log_tool import *
 # Data
 
 acceptable_input = ["1", "2", "3", "4", "r", "p", "s", "g",\
@@ -122,12 +122,13 @@ def check_user_input(A):
             return True
     return False
 
-def game_player_vs_player(A):
+def game_player_vs_player(A, LogT:LogTool ):
     global player_one_lives_counter
     global player_two_lives_counter
     global CPU_player_flag
     set_players_live_counters(A,A)
     rounds_counter = 1
+
     while player_one_lives_counter > 0 and player_two_lives_counter > 0:
         print(f"Round number: {rounds_counter}")
         print(f"PLAYER ONE: {player_one_lives_counter} HP")
@@ -156,6 +157,9 @@ def game_player_vs_player(A):
 
         player_one_choice, player_two_choice = proccess_users_input(player_one_input, player_two_input)
         display_clash(player_one_choice, player_two_choice)
+        LogCl = LogClash()
+        LogCl.SetInfo(player_one_choice, player_two_choice, LogT.GetId(), "CLASH")
+        LogT.NewEntry(LogCl.ToString())
         result_phase_1 = check_ammo(player_one_choice, player_two_choice)
         if result_phase_1 == 1:
             player_two_lives_counter -= 1
@@ -201,12 +205,24 @@ def game_player_vs_player(A):
     
     if player_one_lives_counter == 0 and player_two_lives_counter > 0:
         print("END OF THE GAME, THE WINNER IS:\nPLAYER TWO")
+        LogRes = LogResult()
+        LogRes.SetInfo("P2", rounds_counter, LogT.GetId(),"RESULT")
+        LogT.NewEntry(LogRes.ToString())
     elif player_two_lives_counter == 0 and player_one_lives_counter > 0:
         print("END OF THE GAME, THE WINNER IS:\nPLAYER ONE")
+        LogRes = LogResult()
+        LogRes.SetInfo("P1", rounds_counter, LogT.GetId(),"RESULT")
+        LogT.NewEntry(LogRes.ToString())
     elif player_one_lives_counter == 0 and player_two_lives_counter == 0:
         print("END OF THE GAME, DRAW")
+        LogRes = LogResult()
+        LogRes.SetInfo("DRAW", rounds_counter, LogT.GetId(),"RESULT")
+        LogT.NewEntry(LogRes.ToString())
     else:
         print("ERROR")
+        LogRes = LogResult()
+        LogRes.SetInfo("N/A", rounds_counter, LogT.GetId(),"RESULT_ERROR")
+        LogT.NewEntry(LogRes.ToString())
 
 
 
@@ -255,6 +271,8 @@ print("START")
 print(WELCOME_MESSAGE)
 num_of_lifes = 3
 exit_game = True
+Log_device = LogTool()
+
 while exit_game:
     reload()
 # Select mode [P VS P or P VS CPU]
@@ -280,7 +298,14 @@ while exit_game:
     if input_arg_2_cast < 1:
         input_arg_2_cast = 1
         print("Incorrect number of HP!\n Set to one!")
-    game_player_vs_player(input_arg_2_cast)
+
+    SetupLog = LogSetup()
+    SetupLog.SetInfo(Log_device.GetId(), input_arg_2_cast,input_arg_2_cast,__p1_shells__,\
+                     __p2_shells__, "SETUP", CPU_player_flag)
+    Log_device.NewEntry(SetupLog.ToString())
+    game_player_vs_player(input_arg_2_cast, Log_device)
+
+
 
     while True:
         input_arg_3 = input("Another round? >")
@@ -294,4 +319,6 @@ while exit_game:
         else:
             pass
 
+Log_device.PrintLogs()
+Log_device.Export_as_txt("result")
 print("Goodbye!!!")
